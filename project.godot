@@ -11,8 +11,15 @@ config_version=5
 [application]
 
 config/name="Sierra"
-config/features=PackedStringArray("4.1", "Mobile")
+run/main_scene="res://Scenes/MainScene.tscn"
+config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
+
+[importer_defaults]
+
+animation_library={
+"animation/fps": 60.0
+}
 
 [rendering]
 

@@ -1,3 +1,42 @@
-[gd_scene format=3 uid="uid://bqkt86df5m5aq"]
+[gd_scene load_steps=5 format=3 uid="uid://bqkt86df5m5aq"]
 
-[node name="Node2D" type="Node2D"]
+[ext_resource type="Script" path="res://Scripts/GameBoard.gd" id="1_fwqjd"]
+[ext_resource type="PackedScene" uid="uid://b0dawf0ic5mfl" path="res://Scenes/Tile.tscn" id="2_r6pie"]
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_pk3uq"]
+resource_name = "GameTiles"
+scenes/0/scene = ExtResource("2_r6pie")
+
+[sub_resource type="TileSet" id="TileSet_pa7km"]
+tile_size = Vector2i(128, 128)
+sources/0 = SubResource("TileSetScenesCollectionSource_pk3uq")
+
+[node name="GameBoard" type="Node2D"]
+script = ExtResource("1_fwqjd")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="TileMap" type="TileMap" parent="."]
+position = Vector2(-512, -254)
+tile_set = SubResource("TileSet_pa7km")
+format = 2
+
+[node name="UIContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ScoreLabel" type="Label" parent="UIContainer"]
+layout_mode = 0
+offset_left = -559.0
+offset_top = 282.0
+offset_right = -507.0
+offset_bottom = 305.0
+text = "Score: "
+
+[node name="RestartButton" type="Button" parent="UIContainer"]
+layout_mode = 0
+offset_left = -553.0
+offset_top = -309.0
+offset_right = -488.0
+offset_bottom = -278.0
+text = "Restart"

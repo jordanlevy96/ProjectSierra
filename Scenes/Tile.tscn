@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0dawf0ic5mfl"]
+
+[ext_resource type="Script" path="res://Scripts/Tile.gd" id="1_jpkbl"]
+[ext_resource type="Texture2D" uid="uid://kfp6iob2kukn" path="res://icon.svg" id="2_qxleg"]
+
+[node name="Tile" type="Area2D"]
+script = ExtResource("1_jpkbl")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_qxleg")
