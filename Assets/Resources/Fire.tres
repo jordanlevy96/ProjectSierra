@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="GameTileData" load_steps=3 format=3 uid="uid://m784pdkhik1u"]
+
+[ext_resource type="Script" path="res://Scripts/GameTileData.gd" id="1_ga2al"]
+[ext_resource type="Texture2D" uid="uid://bn2jtbs86c3gm" path="res://Assets/Sprites/Fire.png" id="2_tg0s6"]
+
+[resource]
+script = ExtResource("1_ga2al")
+tile_type = "Fire"
+texture = ExtResource("2_tg0s6")

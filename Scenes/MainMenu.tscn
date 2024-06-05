@@ -1,0 +1,66 @@
+[gd_scene load_steps=5 format=3 uid="uid://txg6e6r47cw3"]
+
+[ext_resource type="Script" path="res://Scripts/MainMenu.gd" id="1_atdjn"]
+
+[sub_resource type="Gradient" id="Gradient_5orya"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.33, 0.66, 1)
+colors = PackedColorArray(0.0784314, 0.403922, 1, 1, 0.419608, 0.309804, 0.223529, 1, 0.921569, 0.337255, 0.294118, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_k7htl"]
+gradient = SubResource("Gradient_5orya")
+
+[sub_resource type="LabelSettings" id="LabelSettings_auij0"]
+font_size = 32
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = SubResource("GradientTexture2D_k7htl")
+
+[node name="Control" type="Control" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_atdjn")
+
+[node name="CenterContainer" type="CenterContainer" parent="Background/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Background/Control/CenterContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/Control/CenterContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/Control/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Background/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Project Sierra
+"
+label_settings = SubResource("LabelSettings_auij0")
+
+[node name="StartButton" type="Button" parent="Background/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start"
+
+[node name="QuitButton" type="Button" parent="Background/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit
+"
+
+[connection signal="pressed" from="Background/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StartButton" to="Background/Control" method="_on_play_pressed"]
+[connection signal="pressed" from="Background/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/QuitButton" to="Background/Control" method="_on_quit_pressed"]

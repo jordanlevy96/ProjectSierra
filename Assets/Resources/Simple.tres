@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="StarterDeck" load_steps=2 format=3 uid="uid://b3etjg2aqhmdi"]
+
+[ext_resource type="Script" path="res://Scripts/StarterDeck.gd" id="1_cswn5"]
+
+[resource]
+script = ExtResource("1_cswn5")
+name = "Starter Deck"
+tile_counts = {
+"Air": 30,
+"Earth": 30,
+"Fire": 30,
+"Water": 30
+}

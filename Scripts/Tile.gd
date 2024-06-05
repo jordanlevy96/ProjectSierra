@@ -1,19 +1,17 @@
 extends Area2D
 
-const TILE_TYPES = ["Fire", "Water", "Earth", "Air"]
-
-var type = ""
+@export var tile_data: GameTileData
 
 signal tile_selected(tile)
 
-func _ready():
-	self.type = get_random_element()
-	connect("input_event", Callable(self, "_on_Tile_input_event"))
+func initialize_tile(data):
+    tile_data = data
+    self.type = tile_data.tile_type
+    $Sprite2D.texture = tile_data.texture
 
-func get_random_element():
-	return TILE_TYPES[randi() % TILE_TYPES.size()]
+func _ready():
+    connect("input_event", Callable(self, "_on_Tile_input_event"))
 
 func _on_Tile_input_event(viewport, event, shape_idx):
-	if event is InputEventMouseButton and event.pressed:
-		emit_signal("tile_selected", self)
-
+    if event is InputEventMouseButton and event.pressed:
+        emit_signal("tile_selected", self)

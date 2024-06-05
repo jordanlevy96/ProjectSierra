@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bqkt86df5m5aq"]
 
-[ext_resource type="Script" path="res://Scripts/GameBoard.gd" id="1_fwqjd"]
+[ext_resource type="Script" path="res://Scripts/Game.gd" id="1_r626l"]
 [ext_resource type="PackedScene" uid="uid://b0dawf0ic5mfl" path="res://Scenes/Tile.tscn" id="2_r6pie"]
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_pk3uq"]
@@ -11,8 +11,10 @@ scenes/0/scene = ExtResource("2_r6pie")
 tile_size = Vector2i(128, 128)
 sources/0 = SubResource("TileSetScenesCollectionSource_pk3uq")
 
-[node name="GameBoard" type="Node2D"]
-script = ExtResource("1_fwqjd")
+[node name="Game" type="Node2D"]
+script = ExtResource("1_r626l")
+tile_scene = null
+resource_folder = null
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -40,3 +42,5 @@ offset_top = -309.0
 offset_right = -488.0
 offset_bottom = -278.0
 text = "Restart"
+
+[node name="Node2D" type="Node2D" parent="."]
