@@ -21,10 +21,10 @@ func move_piece(change):
 	var move_tween = create_tween()
 	var target_position = position + change;
 	print(position, name, target_position);
-	move_tween.interpolate_property(self, "position",
-				position, target_position, .4,
-				Tween.TRANS_BACK, Tween.EASE_OUT);
-	move_tween.start();
+	move_tween.tween_property(
+		self, "position", target_position, .4
+		).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	move_tween.play()
 
 func _on_Tile_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
