@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_cswn5")
-name = "Starter Deck"
+name = "Simple"
 tile_counts = {
 "Air": 30,
 "Earth": 30,

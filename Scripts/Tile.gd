@@ -1,17 +1,31 @@
 extends Area2D
 
-@export var tile_data: GameTileData
+@export var type: String
 
 signal tile_selected(tile)
 
 func initialize_tile(data):
-    tile_data = data
-    self.type = tile_data.tile_type
-    $Sprite2D.texture = tile_data.texture
+	type = data.tile_type
+	$Sprite2D.texture = data.texture
 
+	# ensure all tiles are 64x64
+	var texture_size = $Sprite2D.texture.get_size()
+	var desired_size = Vector2(64, 64)
+	var scale_factor = desired_size / texture_size
+	$Sprite2D.scale = scale_factor
+	
 func _ready():
-    connect("input_event", Callable(self, "_on_Tile_input_event"))
+	connect("input_event", Callable(self, "_on_Tile_input_event"))
 
-func _on_Tile_input_event(viewport, event, shape_idx):
-    if event is InputEventMouseButton and event.pressed:
-        emit_signal("tile_selected", self)
+func move_piece(change):
+	var move_tween = create_tween()
+	var target_position = position + change;
+	print(position, name, target_position);
+	move_tween.interpolate_property(self, "position",
+				position, target_position, .4,
+				Tween.TRANS_BACK, Tween.EASE_OUT);
+	move_tween.start();
+
+func _on_Tile_input_event(_viewport, event, _shape_idx):
+	if event is InputEventMouseButton and event.pressed:
+		emit_signal("tile_selected", self)

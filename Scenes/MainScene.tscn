@@ -1,46 +1,43 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqkt86df5m5aq"]
+[gd_scene load_steps=3 format=3 uid="uid://bqkt86df5m5aq"]
 
 [ext_resource type="Script" path="res://Scripts/Game.gd" id="1_r626l"]
-[ext_resource type="PackedScene" uid="uid://b0dawf0ic5mfl" path="res://Scenes/Tile.tscn" id="2_r6pie"]
-
-[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_pk3uq"]
-resource_name = "GameTiles"
-scenes/0/scene = ExtResource("2_r6pie")
-
-[sub_resource type="TileSet" id="TileSet_pa7km"]
-tile_size = Vector2i(128, 128)
-sources/0 = SubResource("TileSetScenesCollectionSource_pk3uq")
+[ext_resource type="Resource" uid="uid://b3etjg2aqhmdi" path="res://Assets/Resources/Decks/Simple.tres" id="2_5111t"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_r626l")
-tile_scene = null
-resource_folder = null
+starter_deck = ExtResource("2_5111t")
+start = Vector2(-384, 224)
+offset = null
+seed = "test"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
-[node name="TileMap" type="TileMap" parent="."]
-position = Vector2(-512, -254)
-tile_set = SubResource("TileSet_pa7km")
-format = 2
+[node name="TileGrid" type="Node2D" parent="."]
 
 [node name="UIContainer" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -512.0
+offset_top = -288.0
+offset_right = -512.0
+offset_bottom = -288.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ScoreLabel" type="Label" parent="UIContainer"]
 layout_mode = 0
-offset_left = -559.0
-offset_top = 282.0
-offset_right = -507.0
-offset_bottom = 305.0
+offset_left = 16.0
+offset_top = 537.0
+offset_right = 68.0
+offset_bottom = 560.0
 text = "Score: "
 
 [node name="RestartButton" type="Button" parent="UIContainer"]
 layout_mode = 0
-offset_left = -553.0
-offset_top = -309.0
-offset_right = -488.0
-offset_bottom = -278.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 81.0
+offset_bottom = 47.0
 text = "Restart"
-
-[node name="Node2D" type="Node2D" parent="."]
