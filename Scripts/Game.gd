@@ -8,7 +8,7 @@ const resource_folder: String = "res://Assets/Resources/Tiles/"
 @export var starter_deck: StarterDeck
 @export var start: Vector2
 @export var offset: int = 64
-@export var seed: String
+@export var game_seed: String
 
 var rng = RandomNumberGenerator.new()
 var deck = Deck.new()
@@ -22,13 +22,12 @@ var final_touch: Vector2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print(seed)
-	rng.seed = hash(seed)
+	print(game_seed)
+	rng.seed = hash(game_seed)
 	print(rng.seed)
 
 	assert(starter_deck != null, "Starter deck not set")
 	deck.initialize_deck(starter_deck, rng, resource_folder)
-
 
 	$UIContainer/ScoreLabel.text = "Score: 0"
 	$UIContainer/RestartButton.connect("pressed", Callable(self, "_on_RestartButton_pressed"))
@@ -37,13 +36,47 @@ func _ready():
 	initialize_grid()
 	
 func find_matches():
+	print("finding matches")
+	var matches = []
 	for i in GRID_X:
 		for j in GRID_Y:
 			if grid[i][j] != null:
-				var current_tile = grid[i][j]
-				print(current_tile)
-				# if i > 0 && i < grid_size.x - 1:
-					
+				var type = grid[i][j].type
+				var count = 1
+				
+				# Check horizontal
+				var j2 = j + 1
+				while j2 < GRID_Y and grid[i][j2] != null and grid[i][j2].type == type:
+					count += 1
+					j2 += 1
+				if count >= 3:
+					matches.append(grid[i].slice(j, j2))
+
+				count = 1
+				
+				# Check vertical
+				var i2 = i + 1
+				while i2 < GRID_X and grid[i2][j] != null and grid[i2][j].type == type:
+					count += 1
+					i2 += 1
+				if count >= 3:
+					var vert_match = []
+					while (count > 0):
+						print(count)
+						vert_match.append(grid[i+count-1][j])
+						count -= 1
+					matches.append(vert_match)
+
+	return matches
+
+func handle_matches(matches):
+	print(matches)
+	for tiles_in_match in matches:
+		print(tiles_in_match)
+		for tile in tiles_in_match:
+			print(tile.type)
+			tile.get_node("Sprite2D").modulate = Color(1, 1, 1, 0.5)
+
 func match_at(i, j, type):
 	if i > 1:
 		var left = grid[i-1][j]
@@ -75,13 +108,13 @@ func initialize_grid():
 			var tile = tile_scene.instantiate()
 			var tile_data = deck.get_random_tile()
 			tile.initialize_tile(tile_data)
-			# var count = 0
-			# while match_at(i, j, tile.get_type()):
-			# 	assert(count < 100, "Unable to initialize grid without matches")
-			# 	# if it matches, make a new tile instead
-			# 	tile.queue_free()
-			# 	tile = tile_scene.instantiate()
-			# 	count += 1
+			var count = 0
+			while match_at(i, j, tile.type):
+				assert(count < 100, "Unable to initialize grid without matches")
+				# if it matches, make a new tile instead
+				tile_data = deck.get_random_tile()
+				tile.initialize_tile(tile_data)
+				count += 1
 				
 			add_child(tile)
 			tile.position = grid_to_pixel(i, j)
@@ -132,6 +165,7 @@ func swap_pieces(piece, direction):
 	first_piece.move_piece(Vector2(direction.x * offset, direction.y * -offset));
 	other_piece.move_piece(Vector2(direction.x * -offset, direction.y * offset));
 	# find_matches_timer.start();
+	handle_matches(find_matches())
 
 func handle_swap():
 	var difference = final_touch - first_touch;
@@ -148,7 +182,7 @@ func handle_swap():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	touch_input()	
 
 func _on_RestartButton_pressed():

@@ -7,8 +7,6 @@
 script = ExtResource("1_r626l")
 starter_deck = ExtResource("2_5111t")
 start = Vector2(-384, 224)
-offset = null
-seed = "test"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 

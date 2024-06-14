@@ -4,6 +4,8 @@ extends Area2D
 
 signal tile_selected(tile)
 
+var matched: bool = false
+
 func initialize_tile(data):
 	type = data.tile_type
 	$Sprite2D.texture = data.texture
@@ -20,7 +22,6 @@ func _ready():
 func move_piece(change):
 	var move_tween = create_tween()
 	var target_position = position + change;
-	print(position, name, target_position);
 	move_tween.tween_property(
 		self, "position", target_position, .4
 		).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
