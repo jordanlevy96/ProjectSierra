@@ -78,9 +78,9 @@ func initialize_grid():
 			tile.position = grid_to_pixel(i, j)
 			grid[i][j] = tile
 
-func grid_to_pixel(col, row):
-	var x = start.x + offset * col
-	var y = start.y - offset * row
+func grid_to_pixel(row, col):
+	var x = start.x + offset * row
+	var y = start.y - offset * col
 	return Vector2(x, y)
 
 func pixel_to_grid(pixel: Vector2):
@@ -154,8 +154,8 @@ func swap_pieces(piece, direction):
 
 	grid[column + direction.x][row + direction.y] = first_piece
 	grid[column][row] = other_piece
-	first_piece.move_piece(Vector2(direction.x * offset, direction.y * -offset))
-	other_piece.move_piece(Vector2(direction.x * -offset, direction.y * offset))
+	first_piece.move(grid_to_pixel(column + direction.x, row + direction.y));
+	other_piece.move(grid_to_pixel(column, row));
 	if !move_checked:
 		handle_matches(find_matches())
 
@@ -218,7 +218,7 @@ func destroy_matched():
 					grid[i][j] = null
 	move_checked = true;
 	if was_matched:
-		# get_parent().get_node("collapse_timer").start()
+		get_node("CollapseTimer").start()
 		piece1 = null
 		piece2 = null
 	else:
@@ -235,7 +235,33 @@ func collapse_columns():
 						grid[i][j] = grid[i][k]
 						grid[i][k] = null
 						break
-	# get_parent().get_node("refill_timer").start()
+	get_node("RefillTimer").start()
+
+func refill_columns():
+	print("refill_timer");
+	for i in GRID_X:
+		for j in GRID_Y:
+			if grid[i][j] == null:
+
+				# Instance that piece from the array
+				var piece = tile_scene.instantiate();
+				piece.initialize_tile(deck.get_random_tile());
+				add_child(piece);
+				piece.position = grid_to_pixel(i, j + offset);
+				piece.move(grid_to_pixel(i, j));
+				grid[i][j] = piece;
+	after_refill();
+
+func after_refill():
+	print("after_refill");
+	for i in GRID_X:
+		for j in GRID_Y:
+			if grid[i][j] != null:
+				if match_at(i, j, grid[i][j].type):
+					handle_matches(find_matches())
+					return;
+	move_checked = false;
+	state = GameState.MOVE
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -253,3 +279,9 @@ func _on_RestartButton_pressed():
 
 func _on_destroy_timer_timeout():
 	destroy_matched()
+
+func _on_collapse_timer_timeout():
+	collapse_columns()
+
+func _on_refill_timer_timeout():
+	refill_columns()

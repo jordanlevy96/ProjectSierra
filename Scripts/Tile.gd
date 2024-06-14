@@ -19,11 +19,10 @@ func initialize_tile(data):
 func _ready():
 	connect("input_event", Callable(self, "_on_Tile_input_event"))
 
-func move_piece(change):
+func move(target):
 	var move_tween = create_tween()
-	var target_position = position + change;
 	move_tween.tween_property(
-		self, "position", target_position, .4
+		self, "position", target, .4
 		).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	move_tween.play()
 
