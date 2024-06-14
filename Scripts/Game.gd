@@ -17,6 +17,22 @@ var tile_selected = false
 var tile_layer = 0
 var grid = []
 
+enum GameState {
+	MOVE,
+	WAIT,
+	WIN,
+	LOSE
+}
+
+var state: GameState = GameState.MOVE
+
+# Move variables
+var move_checked = false
+var piece1 = null
+var piece2 = null
+var last_location = null
+var last_direction = null
+
 var first_touch: Vector2
 var final_touch: Vector2
 
@@ -34,64 +50,6 @@ func _ready():
 
 	grid = init_2d_array(GRID_X, GRID_Y)
 	initialize_grid()
-	
-func find_matches():
-	print("finding matches")
-	var matches = []
-	for i in GRID_X:
-		for j in GRID_Y:
-			if grid[i][j] != null:
-				var type = grid[i][j].type
-				var count = 1
-				
-				# Check horizontal
-				var j2 = j + 1
-				while j2 < GRID_Y and grid[i][j2] != null and grid[i][j2].type == type:
-					count += 1
-					j2 += 1
-				if count >= 3:
-					matches.append(grid[i].slice(j, j2))
-
-				count = 1
-				
-				# Check vertical
-				var i2 = i + 1
-				while i2 < GRID_X and grid[i2][j] != null and grid[i2][j].type == type:
-					count += 1
-					i2 += 1
-				if count >= 3:
-					var vert_match = []
-					while (count > 0):
-						print(count)
-						vert_match.append(grid[i+count-1][j])
-						count -= 1
-					matches.append(vert_match)
-
-	return matches
-
-func handle_matches(matches):
-	print(matches)
-	for tiles_in_match in matches:
-		print(tiles_in_match)
-		for tile in tiles_in_match:
-			print(tile.type)
-			tile.get_node("Sprite2D").modulate = Color(1, 1, 1, 0.5)
-
-func match_at(i, j, type):
-	if i > 1:
-		var left = grid[i-1][j]
-		var left2 = grid[i-2][j]
-		if left != null && left2 != null:
-			if left.type == type && left2.type == type:
-				return true
-	if j > 1:
-		var down = grid[i][j-1]
-		var down2 = grid[i][j-2]
-		if down != null && down2 != null:
-			if down.type == type && down2.type == type:
-				return true
-
-	return false
 		
 func init_2d_array(width, height):
 	var arr = []
@@ -153,19 +111,21 @@ func touch_input():
 		else:
 			tile_selected = false
 
-func swap_pieces(piece, direction):
-	var row = piece.y
-	var column = piece.x
+func match_at(i, j, type):
+	if i > 1:
+		var left = grid[i-1][j]
+		var left2 = grid[i-2][j]
+		if left != null && left2 != null:
+			if left.type == type && left2.type == type:
+				return true
+	if j > 1:
+		var down = grid[i][j-1]
+		var down2 = grid[i][j-2]
+		if down != null && down2 != null:
+			if down.type == type && down2.type == type:
+				return true
 
-	var first_piece = grid[column][row];
-	var other_piece = grid[column + direction.x][row + direction.y];
-
-	grid[column + direction.x][row + direction.y] = first_piece;
-	grid[column][row] = other_piece;
-	first_piece.move_piece(Vector2(direction.x * offset, direction.y * -offset));
-	other_piece.move_piece(Vector2(direction.x * -offset, direction.y * offset));
-	# find_matches_timer.start();
-	handle_matches(find_matches())
+	return false
 
 func handle_swap():
 	var difference = final_touch - first_touch;
@@ -180,10 +140,116 @@ func handle_swap():
 		elif(difference.y < 0):
 			swap_pieces(first_touch, Vector2(0, -1));
 
+func swap_pieces(piece, direction):
+	var row = piece.y
+	var column = piece.x
+
+	var first_piece = grid[column][row]
+	var other_piece = grid[column + direction.x][row + direction.y]
+
+	piece1 = first_piece
+	piece2 = other_piece
+	last_location = Vector2(column, row)
+	last_direction = direction
+
+	grid[column + direction.x][row + direction.y] = first_piece
+	grid[column][row] = other_piece
+	first_piece.move_piece(Vector2(direction.x * offset, direction.y * -offset))
+	other_piece.move_piece(Vector2(direction.x * -offset, direction.y * offset))
+	if !move_checked:
+		handle_matches(find_matches())
+
+func swap_back():
+	print("swap_back")
+	if piece1 != null && piece2 != null:
+		swap_pieces(last_location, last_direction)
+	move_checked = false;
+	state = GameState.MOVE
+	
+func find_matches():
+	var matches = []
+	for i in GRID_X:
+		for j in GRID_Y:
+			if grid[i][j] != null:
+				var type = grid[i][j].type
+				var count = 1
+				
+				# Check horizontal
+				var j2 = j + 1
+				while j2 < GRID_Y and grid[i][j2] != null and grid[i][j2].type == type:
+					count += 1
+					j2 += 1
+				if count >= 3:
+					matches.append(grid[i].slice(j, j2))
+
+				count = 1
+				
+				# Check vertical
+				var i2 = i + 1
+				while i2 < GRID_X and grid[i2][j] != null and grid[i2][j].type == type:
+					count += 1
+					i2 += 1
+				if count >= 3:
+					var vert_match = []
+					while (count > 0):
+						print(count)
+						vert_match.append(grid[i+count-1][j])
+						count -= 1
+					matches.append(vert_match)
+
+	return matches
+
+func handle_matches(matches):
+	for tiles_in_match in matches:
+		for tile in tiles_in_match:
+			tile.matched = true
+			tile.get_node("Sprite2D").modulate = Color(1, 1, 1, 0.5)
+			get_node("DestroyTimer").start()
+
+func destroy_matched():
+	print("destroy_matched");
+	var was_matched = false;
+	for i in GRID_X:
+		for j in GRID_Y:
+			if grid[i][j] != null:
+				if grid[i][j].matched:
+					was_matched = true
+					grid[i][j].queue_free()
+					grid[i][j] = null
+	move_checked = true;
+	if was_matched:
+		# get_parent().get_node("collapse_timer").start()
+		piece1 = null
+		piece2 = null
+	else:
+		swap_back()
+
+func collapse_columns():
+	print("collapse_columns")
+	for i in GRID_X:
+		for j in GRID_Y:
+			if grid[i][j] == null:
+				for k in range(j + 1, GRID_Y):
+					if grid[i][k] != null:
+						grid[i][k].move(grid_to_pixel(i, j))
+						grid[i][j] = grid[i][k]
+						grid[i][k] = null
+						break
+	# get_parent().get_node("refill_timer").start()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	touch_input()	
+	if state == GameState.MOVE:
+		touch_input()	
 
+# TODO: integrate with level menu
 func _on_RestartButton_pressed():
+	for i in GRID_X:
+		for j in GRID_Y:
+			grid[i][j].queue_free()
+			grid[i][j] = null
+
 	initialize_grid()
+
+func _on_destroy_timer_timeout():
+	destroy_matched()

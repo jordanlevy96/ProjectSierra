@@ -39,3 +39,9 @@ offset_top = 16.0
 offset_right = 81.0
 offset_bottom = 47.0
 text = "Restart"
+
+[node name="DestroyTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="DestroyTimer" to="." method="_on_destroy_timer_timeout"]
