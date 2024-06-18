@@ -231,7 +231,7 @@ func collapse_columns():
 			if grid[i][j] == null:
 				for k in range(j + 1, GRID_Y):
 					if grid[i][k] != null:
-						grid[i][k].move(grid_to_pixel(i, j))
+						grid[i][k].move_slower(grid_to_pixel(i, j))
 						grid[i][j] = grid[i][k]
 						grid[i][k] = null
 						break
@@ -242,13 +242,12 @@ func refill_columns():
 	for i in GRID_X:
 		for j in GRID_Y:
 			if grid[i][j] == null:
-
 				# Instance that piece from the array
 				var piece = tile_scene.instantiate();
 				piece.initialize_tile(deck.get_random_tile());
 				add_child(piece);
-				piece.position = grid_to_pixel(i, j + offset);
-				piece.move(grid_to_pixel(i, j));
+				piece.position = Vector2(grid_to_pixel(i, j).x, -300 - offset*j) # -300 is just above the grid
+				piece.move_slower(grid_to_pixel(i, j));
 				grid[i][j] = piece;
 	after_refill();
 

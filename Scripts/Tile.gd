@@ -26,6 +26,13 @@ func move(target):
 		).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	move_tween.play()
 
+func move_slower(target):
+	var move_tween = create_tween()
+	move_tween.tween_property(
+		self, "position", target, .4
+		).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
+	move_tween.play()
+
 func _on_Tile_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
 		emit_signal("tile_selected", self)
