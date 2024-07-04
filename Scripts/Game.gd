@@ -4,6 +4,7 @@ const GRID_X = 12
 const GRID_Y = 8
 const tile_scene: PackedScene = preload("res://Scenes/Tile.tscn")
 const resource_folder: String = "res://Assets/Resources/Tiles/"
+const special_tile_shader: Shader = preload("res://Assets/Resources/Shaders/match-4.gdshader")
 
 @export var starter_deck: StarterDeck
 @export var start: Vector2
@@ -36,7 +37,6 @@ var last_direction = null
 var first_touch: Vector2
 var final_touch: Vector2
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	print(game_seed)
 	rng.seed = hash(game_seed)
@@ -160,7 +160,6 @@ func swap_pieces(piece, direction):
 		handle_matches(find_matches())
 
 func swap_back():
-	print("swap_back")
 	if piece1 != null && piece2 != null:
 		swap_pieces(last_location, last_direction)
 	move_checked = false;
@@ -192,7 +191,6 @@ func find_matches():
 				if count >= 3:
 					var vert_match = []
 					while (count > 0):
-						print(count)
 						vert_match.append(grid[i+count-1][j])
 						count -= 1
 					matches.append(vert_match)
@@ -200,14 +198,34 @@ func find_matches():
 	return matches
 
 func handle_matches(matches):
+	var special_tile
 	for tiles_in_match in matches:
-		for tile in tiles_in_match:
-			tile.matched = true
-			tile.get_node("Sprite2D").modulate = Color(1, 1, 1, 0.5)
-			get_node("DestroyTimer").start()
+		if tiles_in_match.size() > 3:
+			# Identify the special tile for both horizontal and vertical matches
+			special_tile = tiles_in_match[0]  # You can change the index if needed
+			var shader_material = ShaderMaterial.new()
+			shader_material.shader = special_tile_shader
+			shader_material.set_shader_parameter("color1", Color(1.0, 0.0, 0.0, 1.0))  # Red
+			shader_material.set_shader_parameter("color2", Color(0.0, 0.0, 1.0, 1.0))  # Blue
+			shader_material.set_shader_parameter("threshold", 1.0)
+			shader_material.set_shader_parameter("intensity", 1.0)
+			shader_material.set_shader_parameter("opacity", 1.0)
+			shader_material.set_shader_parameter("glow_color", Color(1.0, 1.0, 0.0, 1.0))  # Yellow
+			
+			special_tile.get_node("Sprite2D").material = shader_material
+			special_tile.matched = false
+			print('special tile')
+		
+		# Process the rest of the tiles in the match
+		for i in range(len(tiles_in_match)):
+			var tile = tiles_in_match[i]
+			if tile != special_tile:
+				tile.matched = true
+				tile.get_node("Sprite2D").modulate = Color(1, 1, 1, 0.5)
+	
+	get_node("DestroyTimer").start()
 
 func destroy_matched():
-	print("destroy_matched");
 	var was_matched = false;
 	for i in GRID_X:
 		for j in GRID_Y:
@@ -225,7 +243,6 @@ func destroy_matched():
 		swap_back()
 
 func collapse_columns():
-	print("collapse_columns")
 	for i in GRID_X:
 		for j in GRID_Y:
 			if grid[i][j] == null:
@@ -238,7 +255,6 @@ func collapse_columns():
 	get_node("RefillTimer").start()
 
 func refill_columns():
-	print("refill_timer");
 	for i in GRID_X:
 		for j in GRID_Y:
 			if grid[i][j] == null:
@@ -252,7 +268,6 @@ func refill_columns():
 	after_refill();
 
 func after_refill():
-	print("after_refill");
 	for i in GRID_X:
 		for j in GRID_Y:
 			if grid[i][j] != null:
