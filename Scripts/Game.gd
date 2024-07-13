@@ -175,17 +175,19 @@ func find_matches():
 				
 				# Check horizontal
 				var j2 = j + 1
-				while j2 < GRID_Y and grid[i][j2] != null and grid[i][j2].type == type:
+				while j2 < GRID_Y and grid[i][j2] != null and grid[i][j2].type == type and !grid[i][j2].matched:
 					count += 1
 					j2 += 1
 				if count >= 3:
-					matches.append(grid[i].slice(j, j2))
+					var horz_match = grid[i].slice(j, j2)
+					horz_match.map(func(tile): tile.matched = true)
+					matches.append(horz_match)
 
 				count = 1
 				
 				# Check vertical
 				var i2 = i + 1
-				while i2 < GRID_X and grid[i2][j] != null and grid[i2][j].type == type:
+				while i2 < GRID_X and grid[i2][j] != null and grid[i2][j].type == type and !grid[i2][j].matched:
 					count += 1
 					i2 += 1
 				if count >= 3:
@@ -193,6 +195,8 @@ func find_matches():
 					while (count > 0):
 						vert_match.append(grid[i+count-1][j])
 						count -= 1
+
+					vert_match.map(func(tile): tile.matched = true)
 					matches.append(vert_match)
 
 	return matches
@@ -201,8 +205,13 @@ func handle_matches(matches):
 	var special_tile
 	for tiles_in_match in matches:
 		if tiles_in_match.size() > 3:
-			# Identify the special tile for both horizontal and vertical matches
-			special_tile = tiles_in_match[0]  # You can change the index if needed
+			special_tile = tiles_in_match[0]  # default to first in match
+			for tile in tiles_in_match:
+				if (piece1 != null && piece1 == tile) || (piece2 != null && piece2 == tile):
+					special_tile = tile
+					break
+
+			# TODO: different handling for 4- or 5- matches
 			var shader_material = ShaderMaterial.new()
 			shader_material.shader = special_tile_shader
 			shader_material.set_shader_parameter("color1", Color(1.0, 0.0, 0.0, 1.0))  # Red
@@ -214,14 +223,12 @@ func handle_matches(matches):
 			
 			special_tile.get_node("Sprite2D").material = shader_material
 			special_tile.matched = false
-			print('special tile')
 		
-		# Process the rest of the tiles in the match
-		for i in range(len(tiles_in_match)):
-			var tile = tiles_in_match[i]
-			if tile != special_tile:
-				tile.matched = true
-				tile.get_node("Sprite2D").modulate = Color(1, 1, 1, 0.5)
+		# TODO: destruction animation
+		# for i in range(len(tiles_in_match)):
+		# 	var tile = tiles_in_match[i]
+		# 	if tile != special_tile:
+		# 		tile.get_node("Sprite2D").modulate = Color(1, 1, 1, 0.5)
 	
 	get_node("DestroyTimer").start()
 
@@ -265,9 +272,13 @@ func refill_columns():
 				piece.position = Vector2(grid_to_pixel(i, j).x, -300 - offset*j) # -300 is just above the grid
 				piece.move_slower(grid_to_pixel(i, j));
 				grid[i][j] = piece;
-	after_refill();
+	
+	get_node("DelayTimer").start()
 
 func after_refill():
+	piece1 = null
+	piece2 = null
+
 	for i in GRID_X:
 		for j in GRID_Y:
 			if grid[i][j] != null:
@@ -299,3 +310,6 @@ func _on_collapse_timer_timeout():
 
 func _on_refill_timer_timeout():
 	refill_columns()
+
+func _on_delay_timer_timeout():
+	after_refill()
