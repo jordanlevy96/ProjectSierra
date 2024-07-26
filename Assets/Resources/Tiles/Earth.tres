@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="GameTileData" load_steps=3 format=3 uid="uid://c3j0l75ieiqvm"]
+[gd_resource type="Resource" script_class="RuneData" load_steps=3 format=3 uid="uid://c3j0l75ieiqvm"]
 
-[ext_resource type="Script" path="res://Scripts/GameTileData.gd" id="1_roq05"]
+[ext_resource type="Script" path="res://Scripts/RuneData.gd" id="1_roq05"]
 [ext_resource type="Texture2D" uid="uid://pgyjlgxe2r5x" path="res://Assets/Sprites/Earth.png" id="2_ej1q3"]
 
 [resource]

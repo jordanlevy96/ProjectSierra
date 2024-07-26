@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="GameTileData" load_steps=3 format=3 uid="uid://dyicks8p2cmpd"]
+[gd_resource type="Resource" script_class="RuneData" load_steps=3 format=3 uid="uid://dyicks8p2cmpd"]
 
-[ext_resource type="Script" path="res://Scripts/GameTileData.gd" id="1_k3ffy"]
+[ext_resource type="Script" path="res://Scripts/RuneData.gd" id="1_k3ffy"]
 [ext_resource type="Texture2D" uid="uid://vmi2avcffsuq" path="res://Assets/Sprites/Air.png" id="2_83c75"]
 
 [resource]

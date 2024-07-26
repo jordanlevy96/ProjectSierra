@@ -2,7 +2,7 @@ extends Node2D
 
 const GRID_X = 12
 const GRID_Y = 8
-const tile_scene: PackedScene = preload("res://Scenes/Tile.tscn")
+const rune_scene: PackedScene = preload("res://Scenes/Rune.tscn")
 const resource_folder: String = "res://Assets/Resources/Tiles/"
 const special_tile_shader: Shader = preload("res://Assets/Resources/Shaders/match-4.gdshader")
 
@@ -63,20 +63,20 @@ func init_2d_array(width, height):
 func initialize_grid():
 	for i in GRID_X:
 		for j in GRID_Y:
-			var tile = tile_scene.instantiate()
-			var tile_data = deck.get_random_tile()
-			tile.initialize_tile(tile_data)
+			var rune = rune_scene.instantiate()
+			var rune_data = deck.get_random_tile()
+			rune.initialize(rune_data)
 			var count = 0
-			while match_at(i, j, tile.type):
+			while match_at(i, j, rune.type):
 				assert(count < 100, "Unable to initialize grid without matches")
 				# if it matches, make a new tile instead
-				tile_data = deck.get_random_tile()
-				tile.initialize_tile(tile_data)
+				rune_data = deck.get_random_tile()
+				rune.initialize(rune_data)
 				count += 1
 				
-			add_child(tile)
-			tile.position = grid_to_pixel(i, j)
-			grid[i][j] = tile
+			add_child(rune)
+			rune.position = grid_to_pixel(i, j)
+			grid[i][j] = rune
 
 func grid_to_pixel(row, col):
 	var x = start.x + offset * row
@@ -266,8 +266,8 @@ func refill_columns():
 		for j in GRID_Y:
 			if grid[i][j] == null:
 				# Instance that piece from the array
-				var piece = tile_scene.instantiate();
-				piece.initialize_tile(deck.get_random_tile());
+				var piece = rune_scene.instantiate();
+				piece.initialize(deck.get_random_tile());
 				add_child(piece);
 				piece.position = Vector2(grid_to_pixel(i, j).x, -300 - offset*j) # -300 is just above the grid
 				piece.move_slower(grid_to_pixel(i, j));

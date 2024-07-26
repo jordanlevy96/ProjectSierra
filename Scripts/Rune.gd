@@ -6,7 +6,7 @@ signal tile_selected(tile)
 
 var matched: bool = false
 
-func initialize_tile(data):
+func initialize(data):
 	type = data.tile_type
 	$Sprite2D.texture = data.texture
 
