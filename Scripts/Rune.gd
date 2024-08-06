@@ -1,38 +1,52 @@
-extends Area2D
+extends RigidBody2D
 
-@export var type: String
+@onready var sprite = $Sprite2D
+@onready var collision_shape = $CollisionShape2D
+@onready var selected_shader = preload("res://Assets/Resources/Shaders/selected.gdshader")
+@export var merge_area: Area2D
+var rect_shape: RectangleShape2D
+var selected = false
 
-signal tile_selected(tile)
-
-var matched: bool = false
-
-func initialize(data):
-	type = data.tile_type
-	$Sprite2D.texture = data.texture
-
-	# ensure all tiles are 64x64
-	var texture_size = $Sprite2D.texture.get_size()
-	var desired_size = Vector2(64, 64)
-	var scale_factor = desired_size / texture_size
-	$Sprite2D.scale = scale_factor
-	
 func _ready():
-	connect("input_event", Callable(self, "_on_Tile_input_event"))
+	assert(merge_area != null)
+	set_process_input(true)
 
-func move(target):
-	var move_tween = create_tween()
-	move_tween.tween_property(
-		self, "position", target, .4
-		).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	move_tween.play()
+	rect_shape = RectangleShape2D.new()
+	rect_shape.extents = sprite.texture.get_size() / 2
+	collision_shape.shape = rect_shape
+	sprite.material = ShaderMaterial.new()
+	
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if !selected:
+				if sprite.get_rect().has_point(to_local(event.position)):
+					#sprite.material.shader = selected_shader
+					selected = true
+			else:
+				#sprite.material.shader = null
+				selected = false
 
-func move_slower(target):
-	var move_tween = create_tween()
-	move_tween.tween_property(
-		self, "position", target, .4
-		).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
-	move_tween.play()
+func _process(delta):
+	if selected:
+		# Follow mouse with collision
+		var mouse_pos = get_local_mouse_position()
+		if !test_move(transform, mouse_pos) and test_sprite_within_area(get_global_mouse_position()):
+			move_and_collide(mouse_pos)
 
-func _on_Tile_input_event(_viewport, event, _shape_idx):
-	if event is InputEventMouseButton and event.pressed:
-		emit_signal("tile_selected", self)
+func test_sprite_within_area(pos):
+	var merge_collision_shape = merge_area.get_node("CollisionShape2D") as CollisionShape2D
+	
+	# test all four corners of the sprite at the mouse position
+	var sprite_size = sprite.texture.get_size() / 2
+	var sprite_rect = Rect2(pos - sprite_size, sprite_size * 2)
+	var top_left = sprite_rect.position
+	var top_right = Vector2(sprite_rect.end.x, sprite_rect.position.y)
+	var bottom_left = Vector2(sprite_rect.position.x, sprite_rect.end.y)
+	var bottom_right = sprite_rect.end
+	
+	return (merge_collision_shape.shape.get_rect().has_point(top_left - merge_area.position) and
+			merge_collision_shape.shape.get_rect().has_point(top_right - merge_area.position) and
+			merge_collision_shape.shape.get_rect().has_point(bottom_left - merge_area.position) and
+			merge_collision_shape.shape.get_rect().has_point(bottom_right - merge_area.position))
+

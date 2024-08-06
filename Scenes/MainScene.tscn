@@ -1,62 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqkt86df5m5aq"]
+[gd_scene load_steps=4 format=3 uid="uid://c3sulbb5ley2v"]
 
-[ext_resource type="Script" path="res://Scripts/Game.gd" id="1_r626l"]
-[ext_resource type="Resource" uid="uid://b3etjg2aqhmdi" path="res://Assets/Resources/Decks/Simple.tres" id="2_5111t"]
+[ext_resource type="Script" path="res://Scripts/MainScene.gd" id="1_tvx3h"]
+[ext_resource type="PackedScene" uid="uid://bjcgrjghju2q" path="res://Scenes/MergeArea.tscn" id="2_gs51w"]
+[ext_resource type="PackedScene" uid="uid://b31wslg7b7lmm" path="res://Scenes/Rune.tscn" id="3_b2st2"]
 
-[node name="Game" type="Node2D"]
-script = ExtResource("1_r626l")
-starter_deck = ExtResource("2_5111t")
-start = Vector2(-384, 224)
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_tvx3h")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="MergeArea" parent="." instance=ExtResource("2_gs51w")]
 
-[node name="TileGrid" type="Node2D" parent="."]
+[node name="Rune" parent="." node_paths=PackedStringArray("merge_area") instance=ExtResource("3_b2st2")]
+position = Vector2(154, 321)
+merge_area = NodePath("../MergeArea")
 
-[node name="UIContainer" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -512.0
-offset_top = -288.0
-offset_right = -512.0
-offset_bottom = -288.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ScoreLabel" type="Label" parent="UIContainer"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 537.0
-offset_right = 68.0
-offset_bottom = 560.0
-text = "Score: "
-
-[node name="RestartButton" type="Button" parent="UIContainer"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 81.0
-offset_bottom = 47.0
-text = "Restart"
-
-[node name="DestroyTimer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
-
-[node name="CollapseTimer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
-
-[node name="DelayTimer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
-
-[node name="RefillTimer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
-
-[connection signal="timeout" from="DestroyTimer" to="." method="_on_destroy_timer_timeout"]
-[connection signal="timeout" from="CollapseTimer" to="." method="_on_collapse_timer_timeout"]
-[connection signal="timeout" from="DelayTimer" to="." method="_on_delay_timer_timeout"]
-[connection signal="timeout" from="RefillTimer" to="." method="_on_refill_timer_timeout"]
+[node name="Rune2" parent="." node_paths=PackedStringArray("merge_area") instance=ExtResource("3_b2st2")]
+position = Vector2(294, 853)
+merge_area = NodePath("../MergeArea")
