@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=3 format=3 uid="uid://c2iocigducawt"]
+
+[ext_resource type="Script" path="res://Scripts/RuneData.gd" id="1_f0e0y"]
+[ext_resource type="Texture2D" uid="uid://6esyx1lixds0" path="res://Assets/Sprites/Runes/Fire/01_Spark.png" id="2_87cme"]
+
+[resource]
+script = ExtResource("1_f0e0y")
+rune_type = "Spark"
+texture = ExtResource("2_87cme")
+tier = 1
+scale = 0.02

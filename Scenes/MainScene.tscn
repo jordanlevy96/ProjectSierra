@@ -2,17 +2,10 @@
 
 [ext_resource type="Script" path="res://Scripts/MainScene.gd" id="1_tvx3h"]
 [ext_resource type="PackedScene" uid="uid://bjcgrjghju2q" path="res://Scenes/MergeArea.tscn" id="2_gs51w"]
-[ext_resource type="PackedScene" uid="uid://b31wslg7b7lmm" path="res://Scenes/Rune.tscn" id="3_b2st2"]
+[ext_resource type="Resource" uid="uid://c2iocigducawt" path="res://Assets/Resources/Runes/Fire/01_Spark.tres" id="2_lm6ml"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_tvx3h")
+example_rune = ExtResource("2_lm6ml")
 
 [node name="MergeArea" parent="." instance=ExtResource("2_gs51w")]
-
-[node name="Rune" parent="." node_paths=PackedStringArray("merge_area") instance=ExtResource("3_b2st2")]
-position = Vector2(154, 321)
-merge_area = NodePath("../MergeArea")
-
-[node name="Rune2" parent="." node_paths=PackedStringArray("merge_area") instance=ExtResource("3_b2st2")]
-position = Vector2(294, 853)
-merge_area = NodePath("../MergeArea")
