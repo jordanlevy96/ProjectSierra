@@ -8,18 +8,26 @@ var min_distance
 
 # Number of runes to place
 @export var rune_count: int = 10
+@export var start_codex: CodexData
+#@export var example_rune: RuneData
 
-@export var example_rune: RuneData
+var codex: Codex
 
 func _ready():
-	spawn_runes()
+	codex = Codex.new()
+	codex.initialize(start_codex)
+	create_level()
 	
-func spawn_runes():
+func spawn_rune(rune: Rune):
+	merge_area.add_child(rune)
+	return rune.create()
+	
+func create_level():
 	var placed_runes = []
 	var active_list = []
 
+	var first_rune_instance = spawn_rune(codex.draw_random())
 	# Start with a random initial position
-	var first_rune_instance = create_rune(example_rune)
 	var initial_position = get_random_position_within_merge_area(first_rune_instance)
 	min_distance = first_rune_instance.sprite.texture.get_size().x * first_rune_instance.sprite.scale.x * 2
 	var sample_radius = min_distance * 4
@@ -37,7 +45,7 @@ func spawn_runes():
 			var angle = randf() * PI * 2
 			var distance = randf_range(min_distance, sample_radius)
 			var candidate = sample_position + Vector2(cos(angle), sin(angle)) * distance
-			var rune_instance = create_rune(example_rune)
+			var rune_instance = spawn_rune(codex.draw_random())
 
 			# Check if the candidate is within bounds and not overlapping
 			if is_sprite_position_valid(rune_instance.sprite, candidate, placed_runes):
@@ -47,8 +55,9 @@ func spawn_runes():
 				new_position_found = true
 				break
 			else:
+				var rune_data = rune_instance.rune_data
 				rune_instance.queue_free()
-				
+				codex.add_rune_by_type(rune_data)
 
 		if not new_position_found:
 			# Remove this point from the active list if no valid positions were found
@@ -70,13 +79,6 @@ func is_sprite_position_valid(sprite: Sprite2D, position: Vector2, placed_runes:
 			return false
 
 	return true
-
-
-func create_rune(rune_data: RuneData):
-	var rune_instance = RuneScene.instantiate()
-	merge_area.add_child(rune_instance)
-	rune_instance.init(rune_data)
-	return rune_instance
 
 func get_random_position_within_merge_area(rune: Rune) -> Vector2:
 	# Get the bounding box of the MergeArea in world space

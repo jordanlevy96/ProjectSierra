@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=4 format=3 uid="uid://cshssobnm8kjb"]
+
+[ext_resource type="Resource" uid="uid://l6l42t2h5tjn" path="res://Assets/Resources/Runes/Fire/05_Inferno.tres" id="1_70glt"]
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="1_g7td0"]
+[ext_resource type="Texture2D" uid="uid://cd1rkardr0fqo" path="res://Assets/Sprites/Runes/Fire/04_Pyre.png" id="2_22355"]
+
+[resource]
+script = ExtResource("1_g7td0")
+rune_type = "Pyre"
+texture = ExtResource("2_22355")
+tier = 4
+scale = 0.16
+next = ExtResource("1_70glt")

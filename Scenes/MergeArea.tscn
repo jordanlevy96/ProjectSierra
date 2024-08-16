@@ -3,10 +3,10 @@
 [ext_resource type="Script" path="res://Scripts/MergeArea.gd" id="1_cf3tf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i3fyo"]
-size = Vector2(960, 1080)
+size = Vector2(720, 810)
 
 [node name="MergeArea" type="Area2D"]
-position = Vector2(480, 540)
+position = Vector2(480, 675)
 script = ExtResource("1_cf3tf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

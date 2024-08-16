@@ -5,3 +5,4 @@ class_name RuneData
 @export var texture: Texture2D
 @export var tier: int
 @export var scale: float
+@export var next: RuneData

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=4 format=3 uid="uid://c57tjrfk4fis3"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="1_50s1l"]
+[ext_resource type="Resource" uid="uid://cshssobnm8kjb" path="res://Assets/Resources/Runes/Fire/04_Pyre.tres" id="1_vec4t"]
+[ext_resource type="Texture2D" uid="uid://d002r1cawx1gf" path="res://Assets/Sprites/Runes/Fire/03_Flame.png" id="2_5kla1"]
+
+[resource]
+script = ExtResource("1_50s1l")
+rune_type = "Flame"
+texture = ExtResource("2_5kla1")
+tier = 3
+scale = 0.08
+next = ExtResource("1_vec4t")

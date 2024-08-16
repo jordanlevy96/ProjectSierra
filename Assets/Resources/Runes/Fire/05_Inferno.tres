@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=3 format=3 uid="uid://l6l42t2h5tjn"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="1_1byqn"]
+[ext_resource type="Texture2D" uid="uid://dt8lofmaggncx" path="res://Assets/Sprites/Runes/Fire/05_Inferno.png" id="2_pp0xw"]
+
+[resource]
+script = ExtResource("1_1byqn")
+rune_type = "Inferno"
+texture = ExtResource("2_pp0xw")
+tier = 5
+scale = 0.24

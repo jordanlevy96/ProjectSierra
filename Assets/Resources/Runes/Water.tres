@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="RuneData" load_steps=3 format=3 uid="uid://ch0qha7xi03cq"]
-
-[ext_resource type="Script" path="res://Scripts/RuneData.gd" id="1_0kayq"]
-[ext_resource type="Texture2D" uid="uid://bockxkk8wd6dj" path="res://Assets/Sprites/Water.png" id="2_38olw"]
-
-[resource]
-script = ExtResource("1_0kayq")
-tile_type = "Water"
-texture = ExtResource("2_38olw")

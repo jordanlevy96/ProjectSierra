@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://c3sulbb5ley2v"]
 
-[ext_resource type="Script" path="res://Scripts/MainScene.gd" id="1_tvx3h"]
+[ext_resource type="Script" path="res://Scripts/Level.gd" id="1_tvx3h"]
 [ext_resource type="PackedScene" uid="uid://bjcgrjghju2q" path="res://Scenes/MergeArea.tscn" id="2_gs51w"]
-[ext_resource type="Resource" uid="uid://c2iocigducawt" path="res://Assets/Resources/Runes/Fire/01_Spark.tres" id="2_lm6ml"]
+[ext_resource type="Resource" uid="uid://jykfpd6bp01n" path="res://Assets/Resources/StartConditions/Fire.tres" id="2_n0lul"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_tvx3h")
-example_rune = ExtResource("2_lm6ml")
+start_codex = ExtResource("2_n0lul")
 
 [node name="MergeArea" parent="." instance=ExtResource("2_gs51w")]

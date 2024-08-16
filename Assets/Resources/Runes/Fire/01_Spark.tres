@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="RuneData" load_steps=3 format=3 uid="uid://c2iocigducawt"]
+[gd_resource type="Resource" script_class="RuneData" load_steps=4 format=3 uid="uid://c2iocigducawt"]
 
-[ext_resource type="Script" path="res://Scripts/RuneData.gd" id="1_f0e0y"]
+[ext_resource type="Resource" uid="uid://cxj6jtr3f72tn" path="res://Assets/Resources/Runes/Fire/02_Ember.tres" id="1_a7jbw"]
 [ext_resource type="Texture2D" uid="uid://6esyx1lixds0" path="res://Assets/Sprites/Runes/Fire/01_Spark.png" id="2_87cme"]
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="2_pbyta"]
 
 [resource]
-script = ExtResource("1_f0e0y")
+script = ExtResource("2_pbyta")
 rune_type = "Spark"
 texture = ExtResource("2_87cme")
 tier = 1
 scale = 0.02
+next = ExtResource("1_a7jbw")

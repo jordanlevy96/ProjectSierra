@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=4 format=3 uid="uid://cxj6jtr3f72tn"]
+
+[ext_resource type="Resource" uid="uid://c57tjrfk4fis3" path="res://Assets/Resources/Runes/Fire/03_Flame.tres" id="1_6xoji"]
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="1_exy67"]
+[ext_resource type="Texture2D" uid="uid://ib00n0dc52qj" path="res://Assets/Sprites/Runes/Fire/02_Ember.png" id="2_3d0s6"]
+
+[resource]
+script = ExtResource("1_exy67")
+rune_type = "Ember"
+texture = ExtResource("2_3d0s6")
+tier = 2
+scale = 0.04
+next = ExtResource("1_6xoji")
