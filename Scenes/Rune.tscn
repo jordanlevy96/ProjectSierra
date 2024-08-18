@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b31wslg7b7lmm"]
 
 [ext_resource type="Script" path="res://Scripts/Rune.gd" id="1_rovpq"]
-[ext_resource type="Texture2D" uid="uid://kfp6iob2kukn" path="res://icon.svg" id="2_k8qfh"]
+[ext_resource type="Texture2D" uid="uid://b14lr72fs3dvx" path="res://Assets/Sprites/Runes/TheOneRune.png" id="2_cm2wn"]
 
 [node name="Rune" type="RigidBody2D"]
 disable_mode = 1
@@ -11,13 +11,16 @@ script = ExtResource("1_rovpq")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_k8qfh")
+z_index = 1
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 2
 
 [node name="MergeRadius" type="CollisionShape2D" parent="Area2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+texture = ExtResource("2_cm2wn")
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]
