@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=4 format=3 uid="uid://ctvhtm8wpwjr8"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="1_7yjkv"]
+[ext_resource type="Resource" uid="uid://cfmsuhxj7f1m1" path="res://Assets/Resources/Runes/Earth/05_Mountain.tres" id="1_fo46j"]
+[ext_resource type="Texture2D" uid="uid://c0n3qvhih7f3b" path="res://Assets/Sprites/Runes/Earth/04_Hill.png" id="2_mdlsu"]
+
+[resource]
+script = ExtResource("1_7yjkv")
+rune_type = "Hill"
+texture = ExtResource("2_mdlsu")
+tier = 4
+scale = 0.16
+next = ExtResource("1_fo46j")

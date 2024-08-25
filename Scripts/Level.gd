@@ -3,15 +3,14 @@ extends Node2D
 @onready var RuneScene = preload("res://Scenes/Rune.tscn")
 @onready var merge_area: MergeArea = $MergeArea
 
-# Minimum distance between runes to avoid overlap
-var min_distance
-
 # Number of runes to place
 @export var rune_count: int = 10
 @export var start_codex: CodexData
 #@export var example_rune: RuneData
 
 var codex: Codex
+var placed_runes: Array
+var min_distance: float
 
 func _ready():
 	codex = Codex.new()
@@ -20,10 +19,25 @@ func _ready():
 	
 func spawn_rune(rune: Rune):
 	merge_area.add_child(rune)
-	return rune.create()
+	rune.connect("merged", Callable(self, "_on_rune_merged"))
+	rune.create()
+	
+	# set rune sprite to 0 opacity
+	rune.sprite.modulate = Color(rune.sprite.modulate.r, rune.sprite.modulate.g, rune.sprite.modulate.b, 0)
+	
+	var tween = create_tween()
+	var sprite = rune.sprite
+	tween.tween_property(
+		sprite, 
+		"modulate", 
+		Color(sprite.modulate.r, sprite.modulate.g, sprite.modulate.b, 1),
+		1  # Duration in seconds
+	).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
+	
+	return rune
 	
 func create_level():
-	var placed_runes = []
+	placed_runes = []
 	var active_list = []
 
 	var first_rune_instance = spawn_rune(codex.draw_random())
@@ -48,7 +62,7 @@ func create_level():
 			var rune_instance = spawn_rune(codex.draw_random())
 
 			# Check if the candidate is within bounds and not overlapping
-			if is_sprite_position_valid(rune_instance.sprite, candidate, placed_runes):
+			if is_sprite_position_valid(rune_instance.sprite, candidate):
 				rune_instance.position = candidate
 				placed_runes.append(rune_instance)
 				active_list.append(candidate)
@@ -65,15 +79,15 @@ func create_level():
 			
 	print('placed ', placed_runes.size(), ' runes')
 
-func is_sprite_position_valid(sprite: Sprite2D, position: Vector2, placed_runes: Array) -> bool:
+func is_sprite_position_valid(sprite: Sprite2D, new_position: Vector2) -> bool:
 	# Ensure position is within merge area bounds
-	if not merge_area.test_sprite_within_area(sprite, merge_area.to_global(position)):
+	if not merge_area.test_sprite_within_area(sprite, merge_area.to_global(new_position)):
 		#print('outside of merge area')
 		return false
 
 	# Check against all placed runes
 	for rune_instance in placed_runes:
-		var distance = position.distance_to(rune_instance.position)
+		var distance = new_position.distance_to(rune_instance.position)
 		if distance < min_distance:
 			#print('too close to existing rune')
 			return false
@@ -94,3 +108,32 @@ func get_random_position_within_merge_area(rune: Rune) -> Vector2:
 	y = clamp(y, rect.position.y + sprite_size.y, rect.end.y - sprite_size.y)
 	
 	return Vector2(x, y)
+	
+func _on_rune_merged(rune: Rune):
+	var new_rune = codex.draw_random()
+	if new_rune:
+		new_rune = spawn_rune(new_rune)
+		new_rune.position = get_nearest_position(rune.position, new_rune)
+		placed_runes.append(new_rune)
+	
+	placed_runes.erase(rune)
+	rune.queue_free()
+	
+	
+func get_nearest_position(target_position: Vector2, new_rune: Rune):
+	var nearest_distance = INF
+	var nearest_position = target_position
+		
+	# raycast at different angles until a suitable spawn point is found
+
+	var angle_checks = 360 / 5
+	var distance_checks = 4
+
+	for i in range(angle_checks):
+		var angle = i * 5 * PI / 180
+		
+		for j in range(distance_checks):
+			var distance = j * min_distance
+			var candidate = target_position + Vector2(cos(angle), sin(angle)) * distance
+			if is_sprite_position_valid(new_rune.sprite, candidate):
+				return candidate

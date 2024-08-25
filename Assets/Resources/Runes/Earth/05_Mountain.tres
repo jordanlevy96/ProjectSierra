@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=3 format=3 uid="uid://cfmsuhxj7f1m1"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="1_mjdo1"]
+[ext_resource type="Texture2D" uid="uid://g1qrl01aagqb" path="res://Assets/Sprites/Runes/Earth/05_Mountains.png" id="2_ckqr2"]
+
+[resource]
+script = ExtResource("1_mjdo1")
+rune_type = "Mountain"
+texture = ExtResource("2_ckqr2")
+tier = 5
+scale = 0.22

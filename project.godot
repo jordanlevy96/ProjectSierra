@@ -10,9 +10,9 @@ config_version=5
 
 [application]
 
-config/name="Project Sierra"
+config/name="Runecaster"
 run/main_scene="res://Scenes/MainScene.tscn"
-config/features=PackedStringArray("4.2", "Mobile")
+config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 
 [display]

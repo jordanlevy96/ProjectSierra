@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=3 format=3 uid="uid://8spmk110rdki"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="1_yka5u"]
+[ext_resource type="Texture2D" uid="uid://bjgcyaf8p4pkr" path="res://Assets/Sprites/Runes/Wind/05_Storm.png" id="2_c3oub"]
+
+[resource]
+script = ExtResource("1_yka5u")
+rune_type = "Storm"
+texture = ExtResource("2_c3oub")
+tier = 5
+scale = 0.22

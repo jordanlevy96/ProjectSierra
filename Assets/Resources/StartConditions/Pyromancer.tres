@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CodexData" load_steps=5 format=3 uid="uid://jykfpd6bp01n"]
+
+[ext_resource type="Resource" uid="uid://c2iocigducawt" path="res://Assets/Resources/Runes/Fire/01_Spark.tres" id="1_qbhey"]
+[ext_resource type="Resource" uid="uid://bs6mwxbwf3wwf" path="res://Assets/Resources/Runes/Earth/01_Dust.tres" id="2_q8inj"]
+[ext_resource type="Resource" uid="uid://vn1e5pe7p1r5" path="res://Assets/Resources/Runes/Wind/01_Breeze.tres" id="3_4tqxh"]
+[ext_resource type="Script" path="res://Scripts/Resources/CodexData.gd" id="3_uqjvq"]
+
+[resource]
+script = ExtResource("3_uqjvq")
+runes = {
+ExtResource("1_qbhey"): 10,
+ExtResource("2_q8inj"): 5,
+ExtResource("3_4tqxh"): 5
+}

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=4 format=3 uid="uid://bw4toxgc2oekq"]
+
+[ext_resource type="Resource" uid="uid://w4x4fwdrjyjf" path="res://Assets/Resources/Runes/Wind/04_Gale.tres" id="1_7lwyw"]
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="1_nyj5k"]
+[ext_resource type="Texture2D" uid="uid://ctxe3w34g81ev" path="res://Assets/Sprites/Runes/Wind/03_Zephyr.png" id="3_oiuyg"]
+
+[resource]
+script = ExtResource("1_nyj5k")
+rune_type = "Zephyr"
+texture = ExtResource("3_oiuyg")
+tier = 3
+scale = 0.08
+next = ExtResource("1_7lwyw")

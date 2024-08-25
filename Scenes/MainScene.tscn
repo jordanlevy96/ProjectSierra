@@ -2,16 +2,18 @@
 
 [ext_resource type="Script" path="res://Scripts/Level.gd" id="1_tvx3h"]
 [ext_resource type="PackedScene" uid="uid://bjcgrjghju2q" path="res://Scenes/MergeArea.tscn" id="2_gs51w"]
-[ext_resource type="Resource" uid="uid://jykfpd6bp01n" path="res://Assets/Resources/StartConditions/Fire.tres" id="2_n0lul"]
+[ext_resource type="Resource" uid="uid://jykfpd6bp01n" path="res://Assets/Resources/StartConditions/Pyromancer.tres" id="2_n0lul"]
 [ext_resource type="Texture2D" uid="uid://ctqhk6riji4ru" path="res://Assets/Textures/Paper005_4K-JPG/Paper005_4K_Color.jpg" id="4_1qkyd"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rpldg"]
 texture = ExtResource("4_1qkyd")
 region_rect = Rect2(2272, 904, 1192, 1056)
+modulate_color = Color(1.96078, 1.96078, 1.96078, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_asa76"]
 texture = ExtResource("4_1qkyd")
 region_rect = Rect2(1384, 1496, 1304, 1136)
+modulate_color = Color(1.96078, 1.96078, 1.96078, 1)
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_tvx3h")
@@ -49,6 +51,15 @@ offset_left = 350.0
 offset_top = -476.0
 offset_right = 375.0
 offset_bottom = 419.0
+color = Color(0.791999, 0.791999, 0.791999, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="MergeArea/Control"]
+layout_mode = 0
+offset_left = 1110.0
+offset_top = -476.0
+offset_right = 1150.0
+offset_bottom = 419.0
+color = Color(0.791999, 0.791999, 0.791999, 1)
 
 [node name="ColorRect3" type="ColorRect" parent="MergeArea/Control"]
 layout_mode = 0
@@ -56,9 +67,4 @@ offset_left = -441.0
 offset_top = -476.0
 offset_right = -401.0
 offset_bottom = 419.0
-
-[node name="ColorRect2" type="ColorRect" parent="MergeArea/Control"]
-offset_left = 1110.0
-offset_top = -476.0
-offset_right = 1150.0
-offset_bottom = 419.0
+color = Color(0.791999, 0.791999, 0.791999, 1)

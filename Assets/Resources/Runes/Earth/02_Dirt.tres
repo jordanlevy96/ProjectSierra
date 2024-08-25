@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=4 format=3 uid="uid://db6s6gl5qvkj6"]
+
+[ext_resource type="Resource" uid="uid://vr36fnq5hxro" path="res://Assets/Resources/Runes/Earth/03_Clay.tres" id="1_881ow"]
+[ext_resource type="Texture2D" uid="uid://bkxs6re3xlsdu" path="res://Assets/Sprites/Runes/Earth/02_Dirt.png" id="2_2agjn"]
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="2_tahun"]
+
+[resource]
+script = ExtResource("2_tahun")
+rune_type = "Dirt"
+texture = ExtResource("2_2agjn")
+tier = 2
+scale = 0.04
+next = ExtResource("1_881ow")

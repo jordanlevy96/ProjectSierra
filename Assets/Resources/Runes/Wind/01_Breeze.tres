@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RuneData" load_steps=4 format=3 uid="uid://vn1e5pe7p1r5"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/RuneData.gd" id="1_3mr3u"]
+[ext_resource type="Resource" uid="uid://t0l4c80pqm84" path="res://Assets/Resources/Runes/Wind/02_Gust.tres" id="1_x648y"]
+[ext_resource type="Texture2D" uid="uid://c3ghd6dlls4wd" path="res://Assets/Sprites/Runes/Wind/01_Breeze.png" id="2_uqd10"]
+
+[resource]
+script = ExtResource("1_3mr3u")
+rune_type = "Breeze"
+texture = ExtResource("2_uqd10")
+tier = 1
+scale = 0.02
+next = ExtResource("1_x648y")

@@ -10,19 +10,19 @@ uniform vec4 glow_color : source_color;
 void fragment() {
     // Get the pixel color from the texture
     vec4 pixel_color = texture(TEXTURE, UV);
-    
+
     // Calculate the distance between the pixel color and the first source color
     float distance = length(pixel_color.rgb - color1.rgb);
-    
+
     // Calculate the distance between the pixel color and the second source color
     float distance_second = length(pixel_color.rgb - color2.rgb);
-    
+
     // Create a new variable to store the modified glow color
     vec4 modified_glow_color = glow_color;
-    
+
     // Set the alpha value of the modified glow color to the specified opacity
     modified_glow_color.a = opacity;
-    
+
     // Calculate the sine wave modulation for twinkling effect
     float sine_wave = sin(TIME * 2.0) * 0.5 + 0.5; // Generates a value between 0 and 1
 

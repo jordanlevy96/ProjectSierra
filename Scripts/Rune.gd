@@ -10,6 +10,8 @@ class_name Rune
 
 const selected_opacity = 0.5
 
+signal merged(rune: Rune)
+
 var selected: bool = false
 var merge_candidates: Array = []
 var rune_data: RuneData
@@ -42,29 +44,30 @@ func _input(event):
 			if !selected:
 				if collision_shape.shape.get_rect().has_point(to_local(event.position)):
 					selected = true
-					print('selected ', self)
 					tween_rune_background(area_sprite, selected_opacity, 1)
 					
 			else:
-				if merge_candidates.size() >= 2:
-					while merge_candidates.size() > 0:
-						var merged_rune = merge_candidates.pop_front()
-						merged_rune.queue_free()
+				var candidates = merge_candidates.size()
+				if candidates >= 2:
+					while candidates > 0:
+						var merged_rune: Rune = merge_candidates.pop_front()
+						merged_rune.emit_signal("merged", merged_rune)
+						candidates -= 1
 					rune_data = rune_data.next
 					create()
 				selected = false
 				tween_rune_background(area_sprite, 0, 1)
 
-func _process(delta):
+func _process(_delta):
 	if selected:
 		var mouse_pos = get_local_mouse_position()
 		if !test_move(transform, mouse_pos) and merge_area.test_sprite_within_area(sprite, get_global_mouse_position()):
 			move_and_collide(mouse_pos)
 
-func tween_rune_background(sprite: Sprite2D, alpha: float, duration: float):
+func tween_rune_background(tweening_sprite: Sprite2D, alpha: float, duration: float):
 	var tween = create_tween()
 	tween.tween_property(
-		sprite, 
+		tweening_sprite, 
 		"modulate", 
 		Color(sprite.modulate.r, sprite.modulate.g, sprite.modulate.b, alpha),
 		duration  # Duration in seconds
