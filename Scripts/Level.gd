@@ -1,26 +1,60 @@
 extends Node2D
+class_name Level
 
 @onready var RuneScene = preload("res://Scenes/Rune.tscn")
 @onready var merge_area: MergeArea = $MergeArea
+@onready var codex_display = $UI/CodexDisplay
+@onready var rune_count_display = $UI/CodexDisplay/RuneCount
+
+@export var start_codex: CodexData
 
 # Number of runes to place
 @export var rune_count: int = 10
-@export var start_codex: CodexData
-#@export var example_rune: RuneData
 
 var codex: Codex
 var placed_runes: Array
 var min_distance: float
+var rune_displays: Array
+
+enum GameState {
+	PLAYER_MOVE,
+	MERGING
+}
+
+var state: GameState = GameState.PLAYER_MOVE:
+	set(value):
+		state = value
+		if state == GameState.PLAYER_MOVE:
+			update_codex_display()
+		
 
 func _ready():
 	codex = Codex.new()
 	codex.initialize(start_codex)
 	create_level()
+	update_codex_display()
+	
+	
+func update_codex_display():
+	rune_count_display.text = str(codex.draw_pile.size())
+	
+	for display in rune_displays:
+		display.queue_free()
+	
+	rune_displays = []
+	
+	for i in range(0, min(codex.draw_pile.size(), 2)):
+		var display = RuneScene.instantiate()
+		codex_display.add_child(display)
+		display.rune_data = codex.draw_pile[i].rune_data
+		display.create()
+		display.position = Vector2(80 + i * 40, 120)
+		rune_displays.append(display)
+		
 	
 func spawn_rune(rune: Rune):
 	merge_area.add_child(rune)
 	rune.connect("merged", Callable(self, "_on_rune_merged"))
-	rune.create()
 	
 	# set rune sprite to 0 opacity
 	rune.sprite.modulate = Color(rune.sprite.modulate.r, rune.sprite.modulate.g, rune.sprite.modulate.b, 0)
@@ -34,7 +68,9 @@ func spawn_rune(rune: Rune):
 		1  # Duration in seconds
 	).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
 	
-	return rune
+	rune.merge_area = merge_area
+	
+	return rune.create()
 	
 func create_level():
 	placed_runes = []
@@ -110,17 +146,17 @@ func get_random_position_within_merge_area(rune: Rune) -> Vector2:
 	return Vector2(x, y)
 	
 func _on_rune_merged(rune: Rune):
-	var new_rune = codex.draw_random()
+	var new_rune = codex.draw()
 	if new_rune:
 		new_rune = spawn_rune(new_rune)
-		new_rune.position = get_nearest_position(rune.position, new_rune)
+		new_rune.position = get_nearby_position(rune.position, new_rune)
 		placed_runes.append(new_rune)
 	
 	placed_runes.erase(rune)
 	rune.queue_free()
 	
 	
-func get_nearest_position(target_position: Vector2, new_rune: Rune):
+func get_nearby_position(target_position: Vector2, new_rune: Rune):
 	var nearest_distance = INF
 	var nearest_position = target_position
 		

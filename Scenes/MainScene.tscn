@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://c3sulbb5ley2v"]
+[gd_scene load_steps=8 format=3 uid="uid://c3sulbb5ley2v"]
 
 [ext_resource type="Script" path="res://Scripts/Level.gd" id="1_tvx3h"]
 [ext_resource type="PackedScene" uid="uid://bjcgrjghju2q" path="res://Scenes/MergeArea.tscn" id="2_gs51w"]
 [ext_resource type="Resource" uid="uid://jykfpd6bp01n" path="res://Assets/Resources/StartConditions/Pyromancer.tres" id="2_n0lul"]
 [ext_resource type="Texture2D" uid="uid://ctqhk6riji4ru" path="res://Assets/Textures/Paper005_4K-JPG/Paper005_4K_Color.jpg" id="4_1qkyd"]
+[ext_resource type="LabelSettings" uid="uid://d24vx3s4f3c5w" path="res://Assets/Resources/UI/HUDLabelSettings.tres" id="5_xcbj1"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rpldg"]
 texture = ExtResource("4_1qkyd")
@@ -15,56 +16,107 @@ texture = ExtResource("4_1qkyd")
 region_rect = Rect2(1384, 1496, 1304, 1136)
 modulate_color = Color(1.96078, 1.96078, 1.96078, 1)
 
-[node name="Node2D" type="Node2D"]
+[node name="Level" type="Node2D"]
 script = ExtResource("1_tvx3h")
 start_codex = ExtResource("2_n0lul")
 
 [node name="MergeArea" parent="." instance=ExtResource("2_gs51w")]
+position = Vector2(480, 667)
 
-[node name="Control" type="Control" parent="MergeArea"]
+[node name="UI" type="Control" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MergePage" type="Panel" parent="MergeArea/Control"]
+[node name="Spellbook" type="Control" parent="UI"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = 189.64
+offset_right = -249.0
+offset_bottom = -0.359985
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MergePage" type="Panel" parent="UI/Spellbook"]
 layout_mode = 0
-offset_left = -414.0
-offset_top = -461.0
-offset_right = 362.0
-offset_bottom = 405.0
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 796.0
+offset_bottom = 882.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_rpldg")
 
-[node name="SpellPage" type="Panel" parent="MergeArea/Control"]
+[node name="SpellPage" type="Panel" parent="UI/Spellbook"]
 layout_mode = 0
-offset_left = 360.0
-offset_top = -461.0
-offset_right = 1136.0
-offset_bottom = 405.0
+offset_left = 804.0
+offset_top = 16.0
+offset_right = 1580.0
+offset_bottom = 882.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_asa76")
 
-[node name="ColorRect" type="ColorRect" parent="MergeArea/Control"]
+[node name="ColorRect" type="ColorRect" parent="UI/Spellbook"]
 layout_mode = 0
-offset_left = 350.0
-offset_top = -476.0
-offset_right = 375.0
-offset_bottom = 419.0
+offset_left = 791.0
+offset_top = -5.0
+offset_right = 816.0
+offset_bottom = 890.0
 color = Color(0.791999, 0.791999, 0.791999, 1)
 
-[node name="ColorRect2" type="ColorRect" parent="MergeArea/Control"]
+[node name="ColorRect2" type="ColorRect" parent="UI/Spellbook"]
 layout_mode = 0
-offset_left = 1110.0
-offset_top = -476.0
-offset_right = 1150.0
-offset_bottom = 419.0
+offset_left = 1551.0
+offset_top = -5.0
+offset_right = 1591.0
+offset_bottom = 890.0
 color = Color(0.791999, 0.791999, 0.791999, 1)
 
-[node name="ColorRect3" type="ColorRect" parent="MergeArea/Control"]
+[node name="ColorRect3" type="ColorRect" parent="UI/Spellbook"]
 layout_mode = 0
-offset_left = -441.0
-offset_top = -476.0
-offset_right = -401.0
-offset_bottom = 419.0
+offset_top = -5.0
+offset_right = 40.0
+offset_bottom = 890.0
 color = Color(0.791999, 0.791999, 0.791999, 1)
+
+[node name="CodexDisplay" type="Control" parent="UI"]
+layout_mode = 1
+anchor_left = 0.874
+anchor_top = 0.75
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.08008
+offset_top = 2.99994
+offset_right = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RunesLeft" type="Label" parent="UI/CodexDisplay"]
+layout_mode = 1
+offset_right = 91.0
+offset_bottom = 23.0
+text = "Runes Left: "
+label_settings = ExtResource("5_xcbj1")
+
+[node name="RuneCount" type="Label" parent="UI/CodexDisplay"]
+layout_mode = 1
+offset_left = 173.0
+offset_right = 218.0
+offset_bottom = 36.0
+text = "000"
+label_settings = ExtResource("5_xcbj1")
+
+[node name="UpNext" type="Label" parent="UI/CodexDisplay"]
+layout_mode = 1
+offset_top = 46.0
+offset_right = 109.0
+offset_bottom = 82.0
+text = "Up Next:"
+label_settings = ExtResource("5_xcbj1")

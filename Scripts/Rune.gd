@@ -6,7 +6,7 @@ class_name Rune
 @onready var merge_radius: CollisionShape2D = $Area2D/MergeRadius
 @onready var area_sprite: Sprite2D = $Area2D/Sprite2D
 @onready var selected_shader = preload("res://Assets/Resources/Shaders/selected.gdshader")
-@onready var merge_area: MergeArea = get_parent()
+@onready var level: Level = get_tree().current_scene # I think this means runes will break if instanced outside of a level
 
 const selected_opacity = 0.5
 
@@ -15,6 +15,7 @@ signal merged(rune: Rune)
 var selected: bool = false
 var merge_candidates: Array = []
 var rune_data: RuneData
+var merge_area: MergeArea
 
 func _ready():
 	set_process_input(true)
@@ -39,6 +40,10 @@ func create():
 	return self
 	
 func _input(event):
+	# skip input checks if other stuff is happening
+	if level.state != Level.GameState.PLAYER_MOVE or !merge_area:
+		return
+	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if !selected:
@@ -48,15 +53,21 @@ func _input(event):
 					
 			else:
 				var candidates = merge_candidates.size()
+				
+				# check if it's time for a merge
+				# TODO: use lambdas or something to allow different checks
 				if candidates >= 2:
+					level.state = Level.GameState.MERGING
 					while candidates > 0:
 						var merged_rune: Rune = merge_candidates.pop_front()
 						merged_rune.emit_signal("merged", merged_rune)
 						candidates -= 1
 					rune_data = rune_data.next
 					create()
+					level.state = Level.GameState.PLAYER_MOVE
 				selected = false
 				tween_rune_background(area_sprite, 0, 1)
+				
 
 func _process(_delta):
 	if selected:
@@ -96,4 +107,4 @@ func _on_area_2d_area_exited(area):
 			for candidate in merge_candidates:
 				tween_rune_background(candidate.area_sprite, 0, 1)
 				tween_rune_background(area_sprite, selected_opacity, 1)
-		merge_candidates.erase(other_rune)	
+		merge_candidates.erase(other_rune)
