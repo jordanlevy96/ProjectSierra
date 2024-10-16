@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://c3sulbb5ley2v"]
+[gd_scene load_steps=9 format=3 uid="uid://c3sulbb5ley2v"]
 
 [ext_resource type="Script" path="res://Scripts/Level.gd" id="1_tvx3h"]
 [ext_resource type="PackedScene" uid="uid://bjcgrjghju2q" path="res://Scenes/MergeArea.tscn" id="2_gs51w"]
 [ext_resource type="Resource" uid="uid://jykfpd6bp01n" path="res://Assets/Resources/StartConditions/Pyromancer.tres" id="2_n0lul"]
 [ext_resource type="Texture2D" uid="uid://ctqhk6riji4ru" path="res://Assets/Textures/Paper005_4K-JPG/Paper005_4K_Color.jpg" id="4_1qkyd"]
+[ext_resource type="PackedScene" uid="uid://ms23023bxq18" path="res://Scenes/CastingArea.tscn" id="4_7y8ox"]
 [ext_resource type="LabelSettings" uid="uid://d24vx3s4f3c5w" path="res://Assets/Resources/UI/HUDLabelSettings.tres" id="5_xcbj1"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rpldg"]
@@ -22,6 +23,9 @@ start_codex = ExtResource("2_n0lul")
 
 [node name="MergeArea" parent="." instance=ExtResource("2_gs51w")]
 position = Vector2(480, 667)
+
+[node name="CastingArea" parent="." instance=ExtResource("4_7y8ox")]
+position = Vector2(1266, 619)
 
 [node name="UI" type="Control" parent="."]
 custom_minimum_size = Vector2(1920, 1080)

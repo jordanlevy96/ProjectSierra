@@ -53,8 +53,11 @@ func update_codex_display():
 		
 	
 func spawn_rune(rune: Rune):
-	merge_area.add_child(rune)
+	rune.merge_area = merge_area
 	rune.connect("merged", Callable(self, "_on_rune_merged"))
+	rune.connect("spell_committed", Callable(self, "_on_rune_committed"))
+	merge_area.add_child(rune)
+	rune.create()
 	
 	# set rune sprite to 0 opacity
 	rune.sprite.modulate = Color(rune.sprite.modulate.r, rune.sprite.modulate.g, rune.sprite.modulate.b, 0)
@@ -68,9 +71,7 @@ func spawn_rune(rune: Rune):
 		1  # Duration in seconds
 	).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
 	
-	rune.merge_area = merge_area
-	
-	return rune.create()
+	return rune
 	
 func create_level():
 	placed_runes = []
@@ -113,11 +114,11 @@ func create_level():
 			# Remove this point from the active list if no valid positions were found
 			active_list.remove_at(random_index)
 			
-	print('placed ', placed_runes.size(), ' runes')
+	#print('placed ', placed_runes.size(), ' runes')
 
 func is_sprite_position_valid(sprite: Sprite2D, new_position: Vector2) -> bool:
 	# Ensure position is within merge area bounds
-	if not merge_area.test_sprite_within_area(sprite, merge_area.to_global(new_position)):
+	if not merge_area.test_sprite_within_area(sprite, new_position):
 		#print('outside of merge area')
 		return false
 
@@ -128,6 +129,7 @@ func is_sprite_position_valid(sprite: Sprite2D, new_position: Vector2) -> bool:
 			#print('too close to existing rune')
 			return false
 
+	#print('valid rune placed at ', new_position)
 	return true
 
 func get_random_position_within_merge_area(rune: Rune) -> Vector2:
@@ -135,13 +137,13 @@ func get_random_position_within_merge_area(rune: Rune) -> Vector2:
 	var rect = merge_area.get_rect()
 
 	# Generate a random position within this bounding box
-	var x = randf_range(rect.position.x, rect.position.x + rect.size.x)
-	var y = randf_range(rect.position.y, rect.position.y + rect.size.y)
+	var x = randf_range(rect.position.x, rect.end.x)
+	var y = randf_range(rect.position.y, rect.end.y)
 	
 	# Ensure the rune's sprite fits within the area at this position
-	var sprite_size = rune.sprite.texture.get_size() / 2 * rune.sprite.scale.x
-	x = clamp(x, rect.position.x + sprite_size.x, rect.end.x - sprite_size.x)
-	y = clamp(y, rect.position.y + sprite_size.y, rect.end.y - sprite_size.y)
+	var sprite_size = rune.sprite.texture.get_size() * rune.sprite.scale.x
+	x = clamp(x, rect.position.x + sprite_size.x / 2, rect.end.x - sprite_size.x / 2)
+	y = clamp(y, rect.position.y + sprite_size.y / 2, rect.end.y - sprite_size.y / 2)
 	
 	return Vector2(x, y)
 	
@@ -159,9 +161,8 @@ func _on_rune_merged(rune: Rune):
 func get_nearby_position(target_position: Vector2, new_rune: Rune):
 	var nearest_distance = INF
 	var nearest_position = target_position
-		
-	# raycast at different angles until a suitable spawn point is found
 
+	# raycast at different angles until a suitable spawn point is found
 	var angle_checks = 360 / 5
 	var distance_checks = 4
 
@@ -173,3 +174,7 @@ func get_nearby_position(target_position: Vector2, new_rune: Rune):
 			var candidate = target_position + Vector2(cos(angle), sin(angle)) * distance
 			if is_sprite_position_valid(new_rune.sprite, candidate):
 				return candidate
+
+func _on_rune_committed(rune: Rune):
+	placed_runes.erase(rune)
+	rune.queue_free()
